@@ -83,10 +83,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Единая платформа для записи на корпоративные well-being мероприятия Банка БелВЭБ: йога, тренинги, семейные события, аналитика.",
       },
-      { property: "og:title", content: "БелВЭБ.Благополучие" },
-      { property: "og:description", content: "Корпоративные well-being мероприятия Банка БелВЭБ" },
+      { property: "og:title", content: "БелВЭБ.Благополучие — корпоративные well-being мероприятия" },
+      { property: "og:description", content: "Well-being Admin Hub automates the administration of employee well-being events for BelVEB Bank." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "БелВЭБ.Благополучие — корпоративные well-being мероприятия" },
+      { name: "description", content: "Well-being Admin Hub automates the administration of employee well-being events for BelVEB Bank." },
+      { name: "twitter:description", content: "Well-being Admin Hub automates the administration of employee well-being events for BelVEB Bank." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/dbf2b582-93b9-4786-82c3-8c45b169f3df/id-preview-f7580cc9--d6e68ceb-3c1a-47ea-a1c3-576f20e37560.lovable.app-1782726209070.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/dbf2b582-93b9-4786-82c3-8c45b169f3df/id-preview-f7580cc9--d6e68ceb-3c1a-47ea-a1c3-576f20e37560.lovable.app-1782726209070.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
