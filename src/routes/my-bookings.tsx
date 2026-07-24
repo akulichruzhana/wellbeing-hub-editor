@@ -74,7 +74,10 @@ function MyBookingsPage() {
         ))}
       </div>
 
+      {tab === "profile" && <ProfileForm user={user} updateUser={updateUser} />}
+
       {tab === "active" && (
+
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {active.length === 0 && <EmptyState />}
           {active.map(({ booking, event }) => (
