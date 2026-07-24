@@ -1,20 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { BookmarkCheck, History, BarChart3, Bell, CalendarDays } from "lucide-react";
+import { BookmarkCheck, History, BarChart3, Bell, CalendarDays, UserCircle2, Save, Upload } from "lucide-react";
 import { useAppData, formatDate } from "@/lib/app-data";
 import { EventCard } from "@/components/EventCard";
 
 export const Route = createFileRoute("/my-bookings")({
   head: () => ({
     meta: [
-      { title: "Мои записи — Личный кабинет" },
-      { name: "description", content: "Управление записями, история участия и личная статистика по well-being программам." },
+      { title: "Личный кабинет — БелВЭБ.Благополучие" },
+      { name: "description", content: "Профиль, записи, история участия, статистика и уведомления по well-being программам." },
     ],
   }),
   component: MyBookingsPage,
 });
 
 const TABS = [
+  { id: "profile", label: "Мой профиль", icon: UserCircle2 },
   { id: "active", label: "Активные записи", icon: BookmarkCheck },
   { id: "history", label: "История", icon: History },
   { id: "stats", label: "Моя статистика", icon: BarChart3 },
@@ -23,7 +24,8 @@ const TABS = [
 
 function MyBookingsPage() {
   const { bookings, events, cancelBooking, user, updateUser } = useAppData();
-  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("active");
+  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("profile");
+
 
   const todayIso = new Date().toISOString().slice(0, 10);
   const myEvents = bookings
@@ -72,7 +74,10 @@ function MyBookingsPage() {
         ))}
       </div>
 
+      {tab === "profile" && <ProfileForm user={user} updateUser={updateUser} />}
+
       {tab === "active" && (
+
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {active.length === 0 && <EmptyState />}
           {active.map(({ booking, event }) => (
@@ -224,3 +229,93 @@ function EmptyState() {
     </div>
   );
 }
+
+type UserData = ReturnType<typeof useAppData>["user"];
+
+function ProfileForm({ user, updateUser }: { user: UserData; updateUser: (u: Partial<UserData>) => void }) {
+  const [form, setForm] = useState(user);
+  const [saved, setSaved] = useState(false);
+
+  const save = () => {
+    updateUser(form);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  return (
+    <section className="flex flex-col gap-6 max-w-3xl">
+      <div className="card-soft p-6 md:p-8 gradient-cream-lavender flex items-center gap-5">
+        <div className="size-20 rounded-3xl bg-card grid place-items-center text-2xl font-extrabold shadow-soft">
+          {user.fullName.split(" ").map((n) => n[0]).join("")}
+        </div>
+        <div>
+          <h2 className="text-xl md:text-2xl font-extrabold">{user.fullName}</h2>
+          <p className="text-sm text-muted-foreground mt-1">{user.position} · {user.department}</p>
+        </div>
+      </div>
+
+      <div className="card-soft p-6">
+        <h3 className="font-bold mb-5">Личные данные</h3>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <ProfileField label="ФИО">
+            <input className="profile-input" value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} />
+          </ProfileField>
+          <ProfileField label="Должность">
+            <input className="profile-input" value={form.position} onChange={(e) => setForm({ ...form, position: e.target.value })} />
+          </ProfileField>
+          <ProfileField label="Email">
+            <input className="profile-input" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+          </ProfileField>
+          <ProfileField label="Телефон">
+            <input className="profile-input" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+          </ProfileField>
+          <ProfileField label="Подразделение" className="sm:col-span-2">
+            <input className="profile-input" value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} />
+          </ProfileField>
+        </div>
+
+        <div className="mt-6 flex items-center justify-between flex-wrap gap-3">
+          <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-muted text-sm font-semibold">
+            <Upload className="size-4" /> Загрузить фото
+          </button>
+          <div className="flex items-center gap-3">
+            {saved && <span className="text-sm text-mint-foreground font-semibold">✓ Сохранено</span>}
+            <button
+              onClick={save}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-soft"
+            >
+              <Save className="size-4" /> Сохранить изменения
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        .profile-input {
+          width: 100%;
+          padding: 0.625rem 0.875rem;
+          border-radius: 0.875rem;
+          background: var(--color-muted);
+          border: 1px solid var(--color-border);
+          font-size: 0.875rem;
+          outline: none;
+          font-family: inherit;
+        }
+        .profile-input:focus {
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 25%, transparent);
+        }
+      `}</style>
+    </section>
+  );
+}
+
+function ProfileField({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
+  return (
+    <label className={`flex flex-col gap-1.5 ${className}`}>
+      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{label}</span>
+      {children}
+    </label>
+  );
+}
+

@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrainersRouteImport } from './routes/trainers'
-import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MyBookingsRouteImport } from './routes/my-bookings'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -19,11 +18,6 @@ import { Route as IndexRouteImport } from './routes/index'
 const TrainersRoute = TrainersRouteImport.update({
   id: '/trainers',
   path: '/trainers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyBookingsRoute = MyBookingsRouteImport.update({
@@ -52,7 +46,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/analytics': typeof AnalyticsRoute
   '/my-bookings': typeof MyBookingsRoute
-  '/profile': typeof ProfileRoute
   '/trainers': typeof TrainersRoute
 }
 export interface FileRoutesByTo {
@@ -60,7 +53,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/analytics': typeof AnalyticsRoute
   '/my-bookings': typeof MyBookingsRoute
-  '/profile': typeof ProfileRoute
   '/trainers': typeof TrainersRoute
 }
 export interface FileRoutesById {
@@ -69,28 +61,14 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/analytics': typeof AnalyticsRoute
   '/my-bookings': typeof MyBookingsRoute
-  '/profile': typeof ProfileRoute
   '/trainers': typeof TrainersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/admin'
-    | '/analytics'
-    | '/my-bookings'
-    | '/profile'
-    | '/trainers'
+  fullPaths: '/' | '/admin' | '/analytics' | '/my-bookings' | '/trainers'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/analytics' | '/my-bookings' | '/profile' | '/trainers'
-  id:
-    | '__root__'
-    | '/'
-    | '/admin'
-    | '/analytics'
-    | '/my-bookings'
-    | '/profile'
-    | '/trainers'
+  to: '/' | '/admin' | '/analytics' | '/my-bookings' | '/trainers'
+  id: '__root__' | '/' | '/admin' | '/analytics' | '/my-bookings' | '/trainers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -98,7 +76,6 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AnalyticsRoute: typeof AnalyticsRoute
   MyBookingsRoute: typeof MyBookingsRoute
-  ProfileRoute: typeof ProfileRoute
   TrainersRoute: typeof TrainersRoute
 }
 
@@ -109,13 +86,6 @@ declare module '@tanstack/react-router' {
       path: '/trainers'
       fullPath: '/trainers'
       preLoaderRoute: typeof TrainersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/my-bookings': {
@@ -154,19 +124,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AnalyticsRoute: AnalyticsRoute,
   MyBookingsRoute: MyBookingsRoute,
-  ProfileRoute: ProfileRoute,
   TrainersRoute: TrainersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
