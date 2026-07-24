@@ -14,7 +14,7 @@ import { useAppData } from "@/lib/app-data";
 
 const NAV = [
   { to: "/", label: "Календарь", icon: CalendarDays },
-  { to: "/my-bookings", label: "Личный кабинет", icon: BookmarkCheck },
+  { to: "/my-bookings", label: "Мои записи", icon: BookmarkCheck },
   { to: "/trainers", label: "Тренеры", icon: Users },
   { to: "/analytics", label: "Аналитика", icon: BarChart3 },
   { to: "/profile", label: "Мой профиль", icon: UserCircle2 },
