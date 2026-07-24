@@ -1,20 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { BookmarkCheck, History, BarChart3, Bell, CalendarDays } from "lucide-react";
+import { BookmarkCheck, History, BarChart3, Bell, CalendarDays, UserCircle2, Save, Upload } from "lucide-react";
 import { useAppData, formatDate } from "@/lib/app-data";
 import { EventCard } from "@/components/EventCard";
 
 export const Route = createFileRoute("/my-bookings")({
   head: () => ({
     meta: [
-      { title: "Мои записи — Личный кабинет" },
-      { name: "description", content: "Управление записями, история участия и личная статистика по well-being программам." },
+      { title: "Личный кабинет — БелВЭБ.Благополучие" },
+      { name: "description", content: "Профиль, записи, история участия, статистика и уведомления по well-being программам." },
     ],
   }),
   component: MyBookingsPage,
 });
 
 const TABS = [
+  { id: "profile", label: "Мой профиль", icon: UserCircle2 },
   { id: "active", label: "Активные записи", icon: BookmarkCheck },
   { id: "history", label: "История", icon: History },
   { id: "stats", label: "Моя статистика", icon: BarChart3 },
@@ -23,7 +24,8 @@ const TABS = [
 
 function MyBookingsPage() {
   const { bookings, events, cancelBooking, user, updateUser } = useAppData();
-  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("active");
+  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("profile");
+
 
   const todayIso = new Date().toISOString().slice(0, 10);
   const myEvents = bookings
