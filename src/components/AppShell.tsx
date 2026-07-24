@@ -4,7 +4,6 @@ import {
   BookmarkCheck,
   Users,
   BarChart3,
-  UserCircle2,
   Settings2,
   Sparkles,
   Bell,
@@ -14,12 +13,12 @@ import { useAppData } from "@/lib/app-data";
 
 const NAV = [
   { to: "/", label: "Календарь", icon: CalendarDays },
-  { to: "/my-bookings", label: "Мои записи", icon: BookmarkCheck },
+  { to: "/my-bookings", label: "Личный кабинет", icon: BookmarkCheck },
   { to: "/trainers", label: "Тренеры", icon: Users },
   { to: "/analytics", label: "Аналитика", icon: BarChart3 },
-  { to: "/profile", label: "Мой профиль", icon: UserCircle2 },
   { to: "/admin", label: "Админ-панель", icon: Settings2 },
 ] as const;
+
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { user } = useAppData();
